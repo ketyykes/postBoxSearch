@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      table { 
+        width: 100%;
+        border:1px solid #000; 
+        font-family: 微軟正黑體; 
+        font-size:16px;
+        border:1px solid #000;
+        text-align:center;
+        border-collapse:collapse;
+      } 
+      th { 
+        background-color: #009FCC;
+        padding:10px;
+        border:1px solid #000;
+        color:#fff;
+      }
+      th:nth-child(1),th:nth-child(3),th:nth-child(9){
+        white-space:nowrap;
+      }
+      td { 
+        border:1px solid #000;
+        padding:5px;
+      }
+      tr:nth-child(odd){
+      background-color:rgb(221, 195, 195);
+	}
+    </style>
+</head>
+<body>
+    <h1>這是我的google sheet資料庫</h1>
+    <table class="postBox">
+      <tbody>
+        <th>資料導入中...</th>
+      </tbody>
+     
+  </table>
+    <script>
+    const getPostBox = document.querySelector(".postBox").children[0];
+    let dataPostBox = [];
+    const url = `https://script.google.com/macros/s/AKfycbzd2PUabvSi3MBiiAe7t5NPnLW9ntMY2iWjqkycw1zea3hAcn0kv82jBViY-O9U4xjN/exec`;
+    fetch(url, {method:'GET'})
+    .then(res => {
+        return res.json();  
+    }).then(result => {
+        console.log(result);
+        // writeInPage(result);
+        dataPostBox = result;
+        console.log(dataPostBox);
+        writeInPage(dataPostBox);
+      
+    });
+    // function writeInPage(){
+
+
+    // }
+    function writeInPage(data) {
+
+      let dataTitle =[];
+      Object.keys(data[0]).forEach(element => {
+          dataTitle.push(element);
+      });
+      console.log(dataTitle);
+      getPostBox.innerHTML = `<tr></tr>`;
+      dataTitle.forEach(element =>{
+        getPostBox.children[0].innerHTML += `<th>${element}</th>`;
+      })
+      
+
+      for (var i=0; i<data.length; i++) {
+      
+        getPostBox.innerHTML += `
+            <tr>
+                <td>${data[i][dataTitle[0]]}</td>
+                <td>${data[i][dataTitle[1]]}</td>
+                <td>${data[i][dataTitle[2]]}</td>
+                <td>${data[i][dataTitle[3]]}</td>
+            </tr>
+        `;
+        }
+    }
+
+    </script>
+</body>
+</html>
